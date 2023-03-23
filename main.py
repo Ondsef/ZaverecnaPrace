@@ -1,9 +1,11 @@
-#git add
+#git add .
 #git commit -m "Pridal jsem soubor app.py"
 #git push
 #git pull
 
-print("Hello World")
+#importy
+import random
 
-def f(x):
-    return x
+
+#kod
+
