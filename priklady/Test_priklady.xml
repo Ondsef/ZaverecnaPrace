@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<priklady>
+    <nazev>
+        Hard priklad
+    </nazev>
+    <priklad id='homogenni'>
+        <zadani>
+            {a}x + {b} = 0
+        </zadani>
+        <promenna>
+            <znacka>a</znacka>
+            <min>1</min>
+            <max>10</max>
+        </promenna>
+        <promenna>
+            <znacka>b</znacka>
+            <min>5</min>
+            <max>6</max>
+        </promenna>
+    </priklad>
+    <priklad id='homogenni'>
+        <zadani>
+            {a}x + {b} = {c} + {d}x
+        </zadani>
+        <promenna>
+            <znacka>a</znacka>
+            <min>1</min>
+            <max>10</max>
+        </promenna>
+        <promenna>
+            <znacka>b</znacka>
+            <min>5</min>
+            <max>6</max>
+        </promenna>
+        <promenna>
+            <znacka>c</znacka>
+            <min>1</min>
+            <max>2</max>
+        </promenna>
+        <promenna>
+            <znacka>d</znacka>
+            <min>10</min>
+            <max>13</max>
+        </promenna>
+    </priklad>
+    <priklad id='nehomogenni'>
+        <zadani>
+        {a}x + {c}x = 1
+        </zadani>
+        <promenna>
+            <znacka>a</znacka>
+            <min>1</min>
+            <max>10</max>
+        </promenna>
+        <promenna>
+            <znacka>c</znacka>
+            <min>10</min>
+            <max>20</max>
+        </promenna>
+    </priklad>
+</priklady>
