@@ -2,6 +2,7 @@ from xml.dom import minidom
 import random
 from sympy import *
 import pickle
+import os
 
 
 def vytvor_seznam_pr(typy_pr, pozadovane_typy):     #TODO spatny format?
@@ -28,6 +29,47 @@ def vytvor_komplet_priklad(priklad):        #TODO zlomky, floaty, -,  kontrola m
         zadani = zadani.replace('{'+ znacka + '}', str(hodnota))
     
     return Priklad(zadani)
+
+
+def vytvor_znamku(uspesnost):
+
+    if uspesnost >= 0.8:
+        return 1
+    elif uspesnost >= 0.6:
+        return 2
+    elif uspesnost >= 0.4:
+        return 3
+    elif uspesnost >= 0.2:
+        return 4
+    else:
+        return 5
+
+
+def uloz_studenta(jmeno, znamka):
+
+    znamka = int(znamka)
+    soubor = f'studenti/{jmeno}.pkl'
+
+    if os.path.exists(soubor):
+        with open(soubor, 'rb') as file:
+            student = pickle.load(file)
+
+        student.pridat_znamku(znamka)
+        student.ulozit()
+
+        print(f"Známky pro uživatele {jmeno} byly aktualizovány.")
+
+    else:
+        student = Student(jmeno)
+        student.pridat_znamku(znamka)
+        student.ulozit()
+
+        print(f"Uživatel {jmeno} byl vytvořen se známkami.")
+
+    with open(soubor, 'rb') as file:
+        student = pickle.load(file)
+        print(student.znamky)
+
 
 
 class Database:         #TODO Špatná cesta, změna cesty?
@@ -109,7 +151,7 @@ class Student:
         return self._jmeno
     @jmeno.setter
     def jmeno(self, value):
-        self._jmeno = value
+        raise AttributeError("Nemůžete změnit hodnotu atributu.")
 
     @property
     def znamky(self):
@@ -118,10 +160,10 @@ class Student:
     def trida(self, value):
         raise AttributeError("Nemůžete změnit hodnotu atributu.")
     
-    def pridat_znamky(self, znamka):
+    def pridat_znamku(self, znamka):
         self._znamky.append(znamka)
 
-    def ulozit(self, slozka):
+    def ulozit(self):
         soubor = f'studenti/{self._jmeno}.pkl'
         with open(soubor, 'wb') as file:
             pickle.dump(self, file)
@@ -134,6 +176,7 @@ def main():         #TODO ofc dodelat a prehlednejsi?
     typy = dict((x.strip(), int(y.strip()))
              for x, y in (element.split('-')
              for element in typy.split(', ')))
+    pocet_studentu = int(input('Kolik studentů bude psát test?'))
 
     soubor = Database(path)
 
@@ -142,20 +185,34 @@ def main():         #TODO ofc dodelat a prehlednejsi?
 
         seznam_pr.append(vytvor_komplet_priklad(priklad))
 
-    for zadani in seznam_pr:
 
-        print(zadani.priklad)
-        odpoved = sympify(input('Výsledek?'))
-        
-        if odpoved == zadani.vyres_priklad()[0]:
-            print(f'GJ vysledek je {zadani.vyres_priklad()[0]}')
-            zadani.uspesnost = 1
-        else:
-            print(f'bad, reseni je {zadani.vyres_priklad()[0]}')
-            zadani.uspesnost = 0
+    for _ in range(pocet_studentu):
+
+        jmeno = input('Zadej jmeno: ')
+        znamka_poc = 0
+
+        for zadani in seznam_pr:
+
+            print(zadani.priklad)
+            odpoved = sympify(input('Výsledek?'))
+            
+            if odpoved == zadani.vyres_priklad()[0]:
+                print(f'GJ vysledek je {zadani.vyres_priklad()[0]}')
+                zadani.uspesnost = 1
+                znamka_poc += 1
+            else:
+                print(f'bad, reseni je {zadani.vyres_priklad()[0]}')
+                zadani.uspesnost = 0
+
+        znamka = vytvor_znamku(znamka_poc/len(seznam_pr))
+
+        print(f'Tvoje známka je: {znamka}')
+
+        uloz_studenta(jmeno, znamka)
+
 
     for zadani in seznam_pr:
-        print(zadani.uspesnost)
+        print(f'Zadani: {zadani.priklad} ma uspesnot: {zadani.uspesnost}')
     
     input('konec?')
 
