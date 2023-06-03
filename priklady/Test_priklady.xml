@@ -20,7 +20,7 @@
     </priklad>
     <priklad id='homogenni'>
         <zadani>
-            {a}x + {b} = {c} + {d}x
+            {a}x - {b} + {c}x = 0
         </zadani>
         <promenna>
             <znacka>a</znacka>
@@ -30,22 +30,17 @@
         <promenna>
             <znacka>b</znacka>
             <min>5</min>
-            <max>6</max>
+            <max>8</max>
         </promenna>
         <promenna>
             <znacka>c</znacka>
-            <min>1</min>
-            <max>2</max>
-        </promenna>
-        <promenna>
-            <znacka>d</znacka>
-            <min>10</min>
-            <max>13</max>
+            <min>3</min>
+            <max>6</max>
         </promenna>
     </priklad>
     <priklad id='nehomogenni'>
         <zadani>
-        {a}x + {c}x = 1
+        {a}x + {b} = {c}x + {d}
         </zadani>
         <promenna>
             <znacka>a</znacka>
@@ -53,9 +48,44 @@
             <max>10</max>
         </promenna>
         <promenna>
-            <znacka>c</znacka>
+            <znacka>b</znacka>
             <min>10</min>
             <max>20</max>
+        </promenna>
+        <promenna>
+            <znacka>c</znacka>
+            <min>3</min>
+            <max>7</max>
+        </promenna>
+        <promenna>
+            <znacka>d</znacka>
+            <min>30</min>
+            <max>40</max>
+        </promenna>
+    </priklad>
+    <priklad id='nehomogenni'>
+        <zadani>
+        {a}x - {b} = {c}x - {d}
+        </zadani>
+        <promenna>
+            <znacka>a</znacka>
+            <min>1</min>
+            <max>10</max>
+        </promenna>
+        <promenna>
+            <znacka>b</znacka>
+            <min>10</min>
+            <max>20</max>
+        </promenna>
+        <promenna>
+            <znacka>c</znacka>
+            <min>3</min>
+            <max>7</max>
+        </promenna>
+        <promenna>
+            <znacka>d</znacka>
+            <min>30</min>
+            <max>40</max>
         </promenna>
     </priklad>
 </priklady>

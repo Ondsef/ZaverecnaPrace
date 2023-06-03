@@ -178,7 +178,7 @@ class Student:
             pickle.dump(self, file)
 
 
-def main():         #TODO ofc dodelat a prehlednejsi?
+def main():         #TODO ofc dodelat, ošetřit když bude blbý imput a prehlednejsi?
 
     # vstupy zadávající vyučující
     path = input('Adresa xml souboru: ')
