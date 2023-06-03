@@ -5,6 +5,7 @@ import pickle
 import os
 
 
+# z typů příkladů vyparsovaných ze xml souboru (typy_pr) vybere takové typy a takový počet, který zadá uživatel(požadovane_typy)
 def vytvor_seznam_pr(typy_pr, pozadovane_typy):     #TODO spatny format?
 
     seznam = []
@@ -16,6 +17,7 @@ def vytvor_seznam_pr(typy_pr, pozadovane_typy):     #TODO spatny format?
     return seznam
 
 
+# v příkladu (priklad) nahradí proměnné náhodnými veličinami podle xml souboru, vratí vytvořený příklad (třídy Priklad)!!
 def vytvor_komplet_priklad(priklad):        #TODO zlomky, floaty, -,  kontrola min max, jednicka, same priklad
 
     zadani = priklad.getElementsByTagName('zadani')[0].firstChild.data.strip()
@@ -31,6 +33,7 @@ def vytvor_komplet_priklad(priklad):        #TODO zlomky, floaty, -,  kontrola m
     return Priklad(zadani)
 
 
+# vrací známku podle úspěšnosti danného testu (uspesnost)
 def vytvor_znamku(uspesnost):
 
     if uspesnost >= 0.8:
@@ -45,6 +48,7 @@ def vytvor_znamku(uspesnost):
         return 5
 
 
+# uloží známku (znamka), kterou dostal student (jmeno) do studentova souboru, pokud už má student záznam - "aktualizuje", jinak vytvoří nový soubor
 def uloz_studenta(jmeno, znamka):
 
     znamka = int(znamka)
@@ -64,17 +68,17 @@ def uloz_studenta(jmeno, znamka):
         student.pridat_znamku(znamka)
         student.ulozit()
 
-        print(f"Uživatel {jmeno} byl vytvořen se známkami.")
+        print(f"Uživatel {jmeno} byl vytvořen.")
 
     with open(soubor, 'rb') as file:
         student = pickle.load(file)
         print(student.znamky)
 
 
-
+# třída Database, obsahuje vyparsované prvky z xml souboru
 class Database:         #TODO Špatná cesta, změna cesty?
     def __init__(self, path):
-
+        
         self._document = minidom.parse(path)
 
     @property
@@ -84,6 +88,7 @@ class Database:         #TODO Špatná cesta, změna cesty?
     def document(self, value):
         raise AttributeError("Nemůžete změnit hodnotu atributu.")
     
+    # vrací slovník typů příkladů, které jsou v xml souboru
     def vytvor_typy_pr(self):
 
         typy_prikladu = {}
@@ -97,6 +102,7 @@ class Database:         #TODO Špatná cesta, změna cesty?
         return typy_prikladu
     
 
+# třída Priklad, obsahuje statistiku úspěšnosti jednotlivých příkladů v testu
 class Priklad:
 
     def __init__(self, priklad):
@@ -117,6 +123,7 @@ class Priklad:
     def uspesnost(self, value):
         self._uspesnost.append(value)
 
+    # vrací řešení příkladu
     def vyres_priklad(self):     #TODO Nerovnosti a výrazy
 
         if ('=' in self._priklad) and ('<' not in self._priklad and '>' not in self._priklad):
@@ -139,7 +146,8 @@ class Priklad:
         else:
             ...
 
-    
+
+# třída Student, obsahuje jednotlivé známky, které daný žák získal
 class Student:
 
     def __init__(self, jmeno):
@@ -163,6 +171,7 @@ class Student:
     def pridat_znamku(self, znamka):
         self._znamky.append(znamka)
 
+    # ukládá studentovi známky do složky studenti
     def ulozit(self):
         soubor = f'studenti/{self._jmeno}.pkl'
         with open(soubor, 'wb') as file:
@@ -171,6 +180,7 @@ class Student:
 
 def main():         #TODO ofc dodelat a prehlednejsi?
 
+    # vstupy zadávající vyučující
     path = input('Adresa xml souboru: ')
     typy = input('Typy prikladů ve tvaru: typ - počet, typ - počet ')
     typy = dict((x.strip(), int(y.strip()))
@@ -180,12 +190,14 @@ def main():         #TODO ofc dodelat a prehlednejsi?
 
     soubor = Database(path)
 
+    # vytvori seznam přepsaných příkladů podle požadovaného typu (třídy Priklad)
     seznam_pr = []
     for priklad in vytvor_seznam_pr(soubor.vytvor_typy_pr(), typy):
 
         seznam_pr.append(vytvor_komplet_priklad(priklad))
 
 
+    # zadaní jednotlivých studentů
     for _ in range(pocet_studentu):
 
         jmeno = input('Zadej jmeno: ')
