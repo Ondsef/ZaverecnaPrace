@@ -5,6 +5,8 @@ import pickle
 import os
 
 
+# TODO "menu" známky/test
+
 # z typů příkladů vyparsovaných ze xml souboru (typy_pr) vybere takové typy a takový počet, který zadá uživatel(požadovane_typy)
 def vytvor_seznam_pr(typy_pr, pozadovane_typy):     #TODO spatny format?
 
@@ -124,7 +126,7 @@ class Priklad:
         self._uspesnost.append(value)
 
     # vrací řešení příkladu
-    def vyres_priklad(self):     #TODO Nerovnosti a výrazy
+    def vyres_priklad(self):     #TODO přehodit rovnost a nerovnost (nebudou normálnější podmínky) a výrazy
 
         if ('=' in self._priklad) and ('<' not in self._priklad and '>' not in self._priklad):
 
@@ -142,7 +144,17 @@ class Priklad:
             return reseni
 
         elif '<' in self._priklad or '>' in self._priklad:
-            ...
+            
+            ns = {'x': Symbol('x', real = True)}
+
+            zadani = self._priklad
+            zadani = zadani.replace('x', '*x')
+            zadani = sympify(zadani, locals = ns)
+            
+            reseni = simplify(solve(zadani))
+
+            return reseni
+
         else:
             ...
 
@@ -206,15 +218,31 @@ def main():         #TODO ofc dodelat, ošetřit když bude blbý imput a prehle
         for zadani in seznam_pr:
 
             print(zadani.priklad)
-            odpoved = sympify(input('Výsledek?'))
             
-            if odpoved == zadani.vyres_priklad()[0]:
-                print(f'GJ vysledek je {zadani.vyres_priklad()[0]}')
-                zadani.uspesnost = 1
-                znamka_poc += 1
+            if '>' in zadani.priklad or '<' in zadani.priklad:
+
+                ns = {'x': Symbol('x', real = True)}
+                odpoved = sympify(input('Výsledek?'), locals=ns)
+
+                if simplify(solve(odpoved)) == zadani.vyres_priklad():
+                    print(f'GJ vysledek je {zadani.vyres_priklad()}')
+                    zadani.uspesnost = 1
+                    znamka_poc += 1
+                else:
+                    print(f'bad, reseni je {zadani.vyres_priklad()}')
+                    zadani.uspesnost = 0
+            
             else:
-                print(f'bad, reseni je {zadani.vyres_priklad()[0]}')
-                zadani.uspesnost = 0
+                
+                odpoved = sympify(input('Výsledek?'))
+
+                if odpoved == zadani.vyres_priklad()[0]:
+                    print(f'GJ vysledek je {zadani.vyres_priklad()[0]}')
+                    zadani.uspesnost = 1
+                    znamka_poc += 1
+                else:
+                    print(f'bad, reseni je {zadani.vyres_priklad()[0]}')
+                    zadani.uspesnost = 0
 
         znamka = vytvor_znamku(znamka_poc/len(seznam_pr))
 

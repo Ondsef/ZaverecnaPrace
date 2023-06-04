@@ -88,4 +88,29 @@
             <max>40</max>
         </promenna>
     </priklad>
+    <priklad id='nerovnice'>
+        <zadani>
+        {a}x - {b} &lt; {c}x - {d}
+        </zadani>
+        <promenna>  
+            <znacka>a</znacka>
+            <min>1</min>
+            <max>10</max>
+        </promenna>
+        <promenna>
+            <znacka>b</znacka>
+            <min>10</min>
+            <max>20</max>
+        </promenna>
+        <promenna>
+            <znacka>c</znacka>
+            <min>3</min>
+            <max>7</max>
+        </promenna>
+        <promenna>
+            <znacka>d</znacka>
+            <min>30</min>
+            <max>40</max>
+        </promenna>
+    </priklad>
 </priklady>
